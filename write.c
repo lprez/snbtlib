@@ -90,8 +90,11 @@ static int nbt_write_tag(gzFile file, nbt_tag *tag)
 	}
 
 	written += nbt_write_byte(file, &tag->id);
-	written += nbt_write_string(file, &tag->name);
-	written += nbt_write_payload(file, tag->id, &tag->payload);
+
+	if (tag->id != NBT_TAG_END) {
+		written += nbt_write_string(file, &tag->name);
+		written += nbt_write_payload(file, tag->id, &tag->payload);
+	}
 
 	return written;
 }
@@ -284,11 +287,15 @@ static int nbt_write_compound(gzFile file, nbt_compound *payload)
 		return NBT_ERR_NULL_PTR;
 	}
 
-	for (curr = * (nbt_tag **) payload; curr->id != NBT_TAG_END; curr++) {
+	for (curr = * (nbt_tag **) payload;; curr++) {
 		res = nbt_write_tag(file, curr);
 
 		if (res) {
 			written += res;
+		}
+
+		if (curr->id == NBT_TAG_END) {
+			break;
 		}
 	}
 
