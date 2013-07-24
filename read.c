@@ -17,18 +17,6 @@ static int nbt_read_list(gzFile file, nbt_list *payload);
 static int nbt_read_compound(gzFile file, nbt_compound *payload);
 static int nbt_read_int_array(gzFile file, nbt_int_array *payload);
 
-static int nbt_write_byte(gzFile file, nbt_byte *payload);
-static int nbt_write_short(gzFile file, nbt_short *payload);
-static int nbt_write_int(gzFile file, nbt_int *payload);
-static int nbt_write_long(gzFile file, nbt_long *payload);
-static int nbt_write_float(gzFile file, nbt_float *payload);
-static int nbt_write_double(gzFile file, nbt_double *payload);
-static int nbt_write_byte_array(gzFile file, nbt_byte_array *payload);
-static int nbt_write_string(gzFile file, nbt_string *payload);
-static int nbt_write_list(gzFile file, nbt_list *payload);
-static int nbt_write_compound(gzFile file, nbt_compound *payload);
-static int nbt_write_int_array(gzFile file, nbt_int_array *payload);
-
 int nbt_read(char *path, nbt_tag *tag)
 {
 	gzFile file;
@@ -48,14 +36,6 @@ int nbt_read(char *path, nbt_tag *tag)
 	gzclose(file);
 
 	return res;
-}
-
-int nbt_write(char *path, nbt_tag *tag)
-{
-}
-
-void nbt_free(nbt_tag *tag)
-{
 }
 
 static int nbt_read_payload(gzFile file, nbt_byte id, nbt_payload *payload)
@@ -257,7 +237,7 @@ static int nbt_read_string(gzFile file, nbt_string *payload)
 		return NBT_ERR_FILE;
 	}
 
-	payload->chars = malloc(sizeof(char) * payload->length);
+	payload->chars = malloc(sizeof(char) * payload->length + 1);
 
 	if (!payload->chars) {
 		return NBT_ERR_MEMORY;
@@ -268,6 +248,8 @@ static int nbt_read_string(gzFile file, nbt_string *payload)
 			payload->chars[i] = 0;
 		}
 	}
+
+	payload->chars[i] = 0;
 
 	return payload->length + sizeof(nbt_short);
 }
