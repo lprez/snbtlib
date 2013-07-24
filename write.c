@@ -18,6 +18,23 @@ static int nbt_write_int_array(gzFile file, nbt_int_array *payload);
 
 int nbt_write(char *path, nbt_tag *tag)
 {
+	int res;
+	gzFile file;
+
+	if (!tag) {
+		return NBT_ERR_INVALID_ARG;
+	}
+
+	file = gzopen(path, "wb");
+
+	if (!file) {
+		return NBT_ERR_FILE;
+	}
+
+	res = nbt_write_tag(file, tag);
+	gzclose(file);
+
+	return res;
 }
 
 static int nbt_write_payload(gzFile file, nbt_byte id, nbt_payload *payload)
