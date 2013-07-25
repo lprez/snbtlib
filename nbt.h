@@ -9,6 +9,8 @@
 #define NBT_ERR_INVALID_ID	-3
 #define NBT_ERR_NULL_PTR	-4
 #define NBT_ERR_INVALID_ARG	-5
+#define NBT_ERR_INVALID_TYPE	-6
+#define NBT_ERR_NONEMPTY	-7
 
 #define NBT_TAG_END		0
 #define NBT_TAG_BYTE		1
@@ -22,6 +24,34 @@
 #define NBT_TAG_LIST		9
 #define NBT_TAG_COMPOUND	10
 #define NBT_TAG_INT_ARRAY	11
+#define NBT_TAG_TAG		127
+
+#define NBT_IS_PARENT(x)	(					\
+					(x == NBT_TAG_BYTE_ARRAY) ||	\
+					(					\
+						(x >= NBT_TAG_LIST) &&	\
+						(x <= NBT_TAG_INT_ARRAY)\
+					)				\
+				)
+
+#define NBT_IS_INTEGER(x)	(					\
+					(x >= NBT_TAG_BYTE) &&		\
+					(x <= NBT_TAG_LONG)		\
+				)
+
+#define NBT_IS_REAL(x)		(					\
+					(x == NBT_TAG_FLOAT) ||		\
+					(x == NBT_TAG_DOUBLE)		\
+				)
+
+#define NBT_IS_STRING(x)	(x == NBT_TAG_STRING)
+
+#define NBT_IS_TAG(x)		(x == NBT_TAG_TAG)
+
+#define NBT_IS_END(x)		(x == NBT_TAG_END)
+
+#define NBT_CHECK(x, type)	(NBT_IS_ ## type ## (x->id))
+
 
 struct nbt_tag;
 union nbt_payload;
@@ -74,11 +104,38 @@ typedef struct nbt_tag {
 	nbt_byte id;
 	nbt_string name;
 	nbt_payload payload;
-	nbt_tag *parent;
+	uint64_t position;
 } nbt_tag;
+
+
+extern nbt_tag *nbt_new(void);
+
+extern nbt_byte nbt_get_type(nbt_tag *tag);
+extern char *nbt_get_name(nbt_tag *tag);
+extern size_t nbt_get_length(nbt_tag *tag);
+extern nbt_byte nbt_get_children_type(nbt_tag *tag);
+extern int64_t nbt_get_integer(nbt_tag *tag);
+extern double nbt_get_real(nbt_tag *tag);
+extern char *nbt_get_string(nbt_tag *tag);
+extern nbt_tag *nbt_get_tag(nbt_tag *tag);
+
+extern int nbt_set_position(nbt_tag *tag, uint64_t value);
+extern int nbt_set_type(nbt_tag *tag, nbt_byte value);
+extern int nbt_set_name(nbt_tag *tag, char *value);
+extern int nbt_set_children_type(nbt_tag *tag, nbt_byte value);
+extern int nbt_set_integer(nbt_tag *tag, int64_t value);
+extern int nbt_set_real(nbt_tag *tag, double value);
+extern int nbt_set_string(nbt_tag *tag, char *value);
+
+extern int nbt_insert_integer(nbt_tag *tag, int64_t value);
+extern int nbt_insert_real(nbt_tag *tag, double value);
+extern int nbt_insert_string(nbt_tag *tag, char *value);
+extern int nbt_insert_tag(nbt_tag *tag, nbt_tag *value);
+
+extern int nbt_remove(nbt_tag *tag);
+extern void nbt_free(nbt_tag *tag);
 
 extern int nbt_read(char *path, nbt_tag *tag);
 extern int nbt_write(char *path, nbt_tag *tag);
-extern void nbt_free(nbt_tag *tag);
 
 #endif
