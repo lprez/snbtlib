@@ -497,6 +497,10 @@ static int delete(nbt_tag *tag)
 
 	elem_pos = unit_size * tag->position;
 
+	if (tag->id == NBT_TAG_COMPOUND) {
+		nbt_free((nbt_tag *) (*origp + elem_pos));
+	}
+
 	memmove(
 			*origp + elem_pos,
 			*origp + elem_pos + unit_size,
