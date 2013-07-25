@@ -336,6 +336,19 @@ void nbt_free(nbt_tag *tag)
 		return;
 	}
 
+	nbt_free_children(tag);
+
+	free(tag);
+}
+
+void nbt_free_children(nbt_tag *tag)
+{
+	nbt_tag *t;
+
+	if (!tag) {
+		return;
+	}
+
 	if (tag->name.chars) {
 		free(tag->name.chars);
 	}
@@ -364,8 +377,10 @@ void nbt_free(nbt_tag *tag)
 
 		case NBT_TAG_COMPOUND:
 			for (t = tag->payload.compound_payload; t->id != NBT_TAG_END; t++) {
-				nbt_free(t);
+				nbt_free_children(t);
 			}
+
+			free(tag->payload.compound_payload);
 
 			break;
 
@@ -376,8 +391,6 @@ void nbt_free(nbt_tag *tag)
 
 			break;
 	}
-
-	free(tag);
 }
 
 static nbt_tag *next_tag(nbt_tag *tag)

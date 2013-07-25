@@ -50,8 +50,6 @@
 
 #define NBT_IS_END(x)		(x == NBT_TAG_END)
 
-#define NBT_CHECK(x, type)	(NBT_IS_ ## type ## (x->id))
-
 
 struct nbt_tag;
 union nbt_payload;
@@ -134,6 +132,7 @@ extern int nbt_insert_tag(nbt_tag *tag, nbt_tag *value);
 
 extern int nbt_remove(nbt_tag *tag);
 extern void nbt_free(nbt_tag *tag);
+extern void nbt_free_children(nbt_tag *tag);
 
 extern int nbt_read(char *path, nbt_tag *tag);
 extern int nbt_write(char *path, nbt_tag *tag);
