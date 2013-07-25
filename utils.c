@@ -386,7 +386,7 @@ static nbt_tag *next_tag(nbt_tag *tag)
 		tag->position = 0;
 	}
 
-	return tag->payload.compound_payload + tag->position;
+	return tag->payload.compound_payload + tag->position++;
 }
 
 static nbt_payload *next_payload(nbt_tag *tag)
