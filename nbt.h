@@ -49,6 +49,7 @@
 #define NBT_TAG_LIST		9
 #define NBT_TAG_COMPOUND	10
 #define NBT_TAG_INT_ARRAY	11
+#define NBT_TAG_INVALID		126
 #define NBT_TAG_TAG		127
 
 #define NBT_IS_PARENT(x)	(					\
@@ -58,6 +59,8 @@
 						(x <= NBT_TAG_INT_ARRAY)\
 					)				\
 				)
+
+#define NBT_IS_MULTIPLE		NBT_IS_PARENT
 
 #define NBT_IS_INTEGER(x)	(					\
 					(x >= NBT_TAG_BYTE) &&		\
@@ -161,5 +164,8 @@ extern void nbt_free_children(nbt_tag *tag);
 
 extern int nbt_read(nbt_tag *tag, char *path);
 extern int nbt_write(nbt_tag *tag, char *path);
+
+extern int nbt_print(nbt_tag *tag);
+extern char *nbt_type_name(nbt_byte id);
 
 #endif

@@ -2,7 +2,7 @@ CC=gcc
 CFLAGS=-c
 LDFLAGS=-lz
 
-libsnbt.a: utils.o read.o write.o
+libsnbt.a: debug.o utils.o read.o write.o
 	ar rvs $@ $^
 
 install: libsnbt.a
