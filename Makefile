@@ -7,6 +7,7 @@ libsnbt.a: debug.o utils.o read.o write.o
 
 install: libsnbt.a
 	install -m 644 $< /usr/lib/
+	install -m 644 nbt.h /usr/include/
 
 read.o: read.c nbt.h
 	$(CC) $(CFLAGS) $< -o $@
