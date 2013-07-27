@@ -213,6 +213,10 @@ int nbt_set_type(nbt_tag *tag, nbt_byte value)
 		return NBT_ERR_INVALID_ARG;
 	}
 
+	if (value < NBT_TAG_END || value > NBT_TAG_INT_ARRAY) {
+		return NBT_ERR_INVALID_ARG;
+	}
+
 	tag->id = value;
 	return 1;
 }
