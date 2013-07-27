@@ -17,7 +17,7 @@ static int nbt_read_list(gzFile file, nbt_list *payload);
 static int nbt_read_compound(gzFile file, nbt_compound *payload);
 static int nbt_read_int_array(gzFile file, nbt_int_array *payload);
 
-int nbt_read(char *path, nbt_tag *tag)
+int nbt_read(nbt_tag *tag, char *path)
 {
 	gzFile file;
 	int res;

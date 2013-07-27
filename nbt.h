@@ -134,7 +134,7 @@ extern int nbt_remove(nbt_tag *tag);
 extern void nbt_free(nbt_tag *tag);
 extern void nbt_free_children(nbt_tag *tag);
 
-extern int nbt_read(char *path, nbt_tag *tag);
-extern int nbt_write(char *path, nbt_tag *tag);
+extern int nbt_read(nbt_tag *tag, char *path);
+extern int nbt_write(nbt_tag *tag, char *path);
 
 #endif

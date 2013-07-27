@@ -16,7 +16,7 @@ static int nbt_write_list(gzFile file, nbt_list *payload);
 static int nbt_write_compound(gzFile file, nbt_compound *payload);
 static int nbt_write_int_array(gzFile file, nbt_int_array *payload);
 
-int nbt_write(char *path, nbt_tag *tag)
+int nbt_write(nbt_tag *tag, char *path)
 {
 	int res;
 	gzFile file;
