@@ -100,11 +100,10 @@ typedef union nbt_payload {
 
 typedef struct nbt_tag {
 	nbt_byte id;
-	nbt_string name;
 	nbt_payload payload;
 	uint64_t position;
+	nbt_string name;
 } nbt_tag;
-
 
 extern nbt_tag *nbt_new(void);
 
@@ -116,6 +115,7 @@ extern int64_t nbt_get_integer(nbt_tag *tag);
 extern double nbt_get_real(nbt_tag *tag);
 extern char *nbt_get_string(nbt_tag *tag);
 extern nbt_tag *nbt_get_tag(nbt_tag *tag);
+extern nbt_tag nbt_get_multiple(nbt_tag *tag);
 
 extern int nbt_set_position(nbt_tag *tag, uint64_t value);
 extern int nbt_set_type(nbt_tag *tag, nbt_byte value);

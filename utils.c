@@ -171,6 +171,33 @@ nbt_tag *nbt_get_tag(nbt_tag *tag)
 	return next_tag(tag);
 }
 
+nbt_tag nbt_get_multiple(nbt_tag *tag)
+{
+	nbt_tag fake_tag = {
+		-1,	
+		(nbt_payload) 0,
+		0,
+		(nbt_string) {
+			0,
+			0
+		}
+	};
+
+	if (!tag || !NBT_IS_PARENT(tag->id)) {
+		return fake_tag;
+	}
+
+	fake_tag.id = nbt_get_children_type(tag);
+	fake_tag.position = 0;
+	fake_tag.payload = next_payload(tag);
+
+	if (!fake_tag.payload) {
+		fake_tag.id = -1;
+	}
+
+	return fake_tag;
+}
+
 int nbt_set_position(nbt_tag *tag, uint64_t value)
 {
 	if (!tag) {
