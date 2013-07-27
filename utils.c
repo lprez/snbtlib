@@ -50,7 +50,7 @@ nbt_tag *nbt_new(void)
 
 nbt_byte nbt_get_type(nbt_tag *tag)
 {
-	return tag ? tag->id : NBT_ERR_INVALID_ARG;
+	return tag ? tag->id : NBT_TAG_INVALID;
 }
 
 char *nbt_get_name(nbt_tag *tag)
@@ -99,7 +99,7 @@ size_t nbt_get_length(nbt_tag *tag)
 nbt_byte nbt_get_children_type(nbt_tag *tag)
 {
 	if (!tag) {
-		return NBT_ERR_INVALID_ARG;
+		return NBT_TAG_INVALID;
 	}
 
 	switch (tag->id) {
@@ -198,13 +198,14 @@ nbt_tag *nbt_get_tag(nbt_tag *tag)
 
 nbt_tag nbt_get_multiple(nbt_tag *tag)
 {
+	nbt_payload *p;
 	nbt_tag fake_tag = {
-		-1,	
-		(nbt_payload) 0,
+		NBT_TAG_INVALID,	
+		{ 0 },
 		0,
 		(nbt_string) {
 			0,
-			0
+			(char *) 0
 		}
 	};
 
@@ -214,10 +215,12 @@ nbt_tag nbt_get_multiple(nbt_tag *tag)
 
 	fake_tag.id = nbt_get_children_type(tag);
 	fake_tag.position = 0;
-	fake_tag.payload = next_payload(tag);
+	p = next_payload(tag);
 
-	if (!fake_tag.payload) {
-		fake_tag.id = -1;
+	if (p) {
+		fake_tag.payload = *p;
+	} else {
+		fake_tag.id = NBT_TAG_INVALID;
 	}
 
 	return fake_tag;
