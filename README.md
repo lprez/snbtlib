@@ -4,8 +4,8 @@ Installation
 	sudo make install
 
 Linking
-=======
-	Add '-lsnbt' option when linking.
+-------
+Add '-lsnbt -lz' options when linking.
 
 Constants
 =========
@@ -25,7 +25,7 @@ Invalid tag ID.
 Internal NULL pointer.
 
 	#define NBT_ERR_INVALID_ARG	-5
-Invalid argument (e.g., a NULL pointer, an invalid type, ...)
+Invalid argument (e.g., a NULL pointer, an invalid type)
 
 	#define NBT_ERR_INVALID_TYPE	-6
 Tag type is not suitable for that operation.
@@ -47,6 +47,7 @@ Tag types
 	#define NBT_TAG_LIST		9
 	#define NBT_TAG_COMPOUND	10
 	#define NBT_TAG_INT_ARRAY	11
+	#define NBT_TAG_INVALID		126
 	#define NBT_TAG_TAG		127
 
 Functions
@@ -59,7 +60,7 @@ Allocates an NBT tag. Returns the new tag, or NULL if there was an error.
 
 nbt_read
 --------
-	nbt_read(nbt_tag *tag, char *path)
+	int nbt_read(nbt_tag *tag, char *path)
 Reads an NBT tag from an NBT file. Returns the number of bytes read from the file, or an error code.
 
 nbt_write
@@ -79,3 +80,6 @@ Frees only the memory allocated by the tag.
 
 Macros
 ======
+
+Examples
+========
