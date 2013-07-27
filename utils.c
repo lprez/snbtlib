@@ -318,7 +318,12 @@ int nbt_set_real(nbt_tag *tag, double value)
 
 	p = next_payload(tag);
 
-	p->double_payload = value;
+	if (tag->id == NBT_TAG_FLOAT) {
+		p->float_payload = (float) value;
+	} else {
+		p->double_payload = value;
+	}
+
 	return 1;
 }
 
